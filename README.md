@@ -11,7 +11,7 @@ This application polls Strava for rides from clubs you are a member of, filters 
 - Web interface for viewing events in a user-friendly format
 
 ## UI Preview
-![image](https://github.com/user-attachments/assets/c3a24a18-b219-4e89-b001-a2630a48e103)
+![image](https://github.com/user-attachments/assets/56dda079-ffec-42f6-879a-ef580f59457d)
 
 ## Project Structure
 
