@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Strava Berlin Events</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+  <header>
+    <div class="container">
+      <h1><i class="fas fa-bicycle"></i> Strava Berlin Events</h1>
+      <div class="file-selector">
+        <label for="file-select">Select file:</label>
+        <select id="file-select">
+          <option value="">Loading files...</option>
+        </select>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="controls">
+      <div class="search-container">
+        <input type="text" id="search" placeholder="Search events...">
+      </div>
+      <div class="filter-container">
+        <label>
+          <input type="checkbox" id="show-all-days" checked>
+          Show all days
+        </label>
+      </div>
+    </div>
+
+    <div id="events-container">
+      <div class="loading">
+        <p>Loading events...</p>
+        <div class="spinner"></div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>Data from Strava API | <a href="https://github.com/yourusername/strava-scraper" target="_blank">GitHub</a></p>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html> 
