@@ -1,14 +1,34 @@
 {
   "useWhitelist": true,
   "includeList": [
-    "8bar Community",
-    "Rapha Berlin",
-    "Standert Bicycles",
-    "CYKEL BUTIK",
-    "super fast super nice",
-    "Trek Bicycle Berlin",
-    "Ryzon - Performance Apparel",
-    "Social Bike Club Berlin"
+    {
+      "id": 126466,
+      "name": "8bar Community"
+    },
+    {
+      "id": 320304,
+      "name": "Rapha Berlin"
+    },
+    {
+      "id": 127441,
+      "name": "Standert Bicycles"
+    },
+    {
+      "id": 969519,
+      "name": "CYKEL BUTIK"
+    },
+    {
+      "id": 441053,
+      "name": "super fast super nice"
+    },
+    {
+      "id": 1030482,
+      "name": "Trek Bicycle Berlin"
+    },
+    {
+      "id": 271922,
+      "name": "Ryzon - Performance Apparel"
+    }
   ],
   "excludeList": []
 }

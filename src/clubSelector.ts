@@ -9,7 +9,7 @@ const logger = new Logger('ClubSelector');
 // Define the club configuration interface
 interface ClubConfig {
   useWhitelist: boolean;
-  includeList: string[];
+  includeList: Array<{ id: number, name: string }>;
   excludeList: string[];
 }
 
@@ -78,8 +78,9 @@ export class ClubSelector {
    */
   private filterClubsUsingConfig(clubs: Club[]): Club[] {
     if (this.clubConfig.useWhitelist) {
+      const clubIds = this.clubConfig.includeList.map(club => club.id);
       const filteredClubs = clubs.filter(club => 
-        this.clubConfig.includeList.includes(club.name)
+        clubIds.includes(club.id)
       );
       logger.info(`Using ${filteredClubs.length} clubs from configuration whitelist`);
       return filteredClubs;
@@ -99,11 +100,14 @@ export class ClubSelector {
     // Sort clubs by name for easier selection
     const sortedClubs = [...clubs].sort((a, b) => a.name.localeCompare(b.name));
     
+    // Get list of club IDs from config
+    const configClubIds = this.clubConfig.includeList.map(club => club.id);
+    
     // Prepare checkboxes with default selections based on current config
     const choices = sortedClubs.map(club => ({
       name: `${club.name} (${club.member_count} members)`,
       value: club.id,
-      checked: this.clubConfig.includeList.includes(club.name)
+      checked: configClubIds.includes(club.id)
     }));
 
     const { selectedClubIds, saveSelection } = await inquirer.prompt([
@@ -142,7 +146,7 @@ export class ClubSelector {
       const updatedConfig = {
         ...this.clubConfig,
         useWhitelist: true,
-        includeList: selectedClubs.map(club => club.name),
+        includeList: selectedClubs.map(club => ({ id: club.id, name: club.name })),
       };
 
       // Save to JSON file
