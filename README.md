@@ -10,6 +10,9 @@ This application polls Strava for rides in Berlin from clubs you are a member of
 - Clean architecture with separation of concerns
 - Web interface for viewing events in a user-friendly format
 
+## UI Preview
+![image](https://github.com/user-attachments/assets/c3a24a18-b219-4e89-b001-a2630a48e103)
+
 ## Project Structure
 
 ```
