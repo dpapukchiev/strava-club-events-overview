@@ -16,7 +16,8 @@ const clubConfig: ClubConfig = {
     'Standert Bicycles',
     'CYKEL BUTIK',
     'Trek Bicycle Berlin',
-    'Ryzon - Performance Apparel'
+    'Ryzon - Performance Apparel',
+    'MAAP'
   ],
   excludeList: []
 };

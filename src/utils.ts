@@ -54,6 +54,37 @@ export function filterEventsByCity(events: ClubEvent[]): ClubEvent[] {
   return filteredEvents;
 }
 
+/**
+ * Extract distance from event description
+ */
+export function extractDistanceFromDescription(event: ClubEvent): string {
+  if (event.distance) {
+    return `${(event.distance / 1000).toFixed(1)} km`;
+  }
+  
+  // Try to find distance in description
+  const description = event.description || '';
+  
+  // Look for common distance patterns: e.g., "Route: 40km", "60 km", "Distance: 50km"
+  const distancePatterns = [
+    /route\s*:?\s*(\d+)[.,]?(\d*)\s*k?m/i,
+    /(\d+)[.,]?(\d*)\s*km/i, 
+    /(\d+)[.,]?(\d*)\s*kilometer/i,
+    /distance\s*:?\s*(\d+)[.,]?(\d*)\s*k?m/i
+  ];
+  
+  for (const pattern of distancePatterns) {
+    const match = description.match(pattern);
+    if (match) {
+      const km = match[1];
+      const decimal = match[2] || '';
+      return decimal ? `${km}.${decimal} km` : `${km} km`;
+    }
+  }
+  
+  return 'Distance not specified';
+}
+
 export function formatEvents(events: ClubEvent[]): string {
   logger.info(`Formatting ${events.length} events for display`);
   
@@ -72,7 +103,7 @@ export function formatEvents(events: ClubEvent[]): string {
           title: event.title,
           date: format(occurrenceDate, 'EEEE, MMMM d, yyyy HH:mm'),
           time: format(occurrenceDate, 'HH:mm'),
-          distance: event.distance ? `${(event.distance / 1000).toFixed(1)} km` : 'Distance not specified',
+          distance: extractDistanceFromDescription(event),
           club: `${event.club_name || `Club #${event.club_id}`}`,
           link: `https://www.strava.com/clubs/${event.club_id}/group_events/${event.id}`
         };
@@ -144,7 +175,7 @@ export function saveEventsToFile(events: ClubEvent[], filePath: string): boolean
           start_time: format(occurrenceDate, 'HH:mm'),
           club_id: event.club_id,
           club_name: event.club_name || `Club #${event.club_id}`,
-          distance: event.distance ? `${(event.distance / 1000).toFixed(1)} km` : 'Distance not specified',
+          distance: extractDistanceFromDescription(event),
           elevation_gain: event.elevation_gain,
           address: event.address,
           link: `https://www.strava.com/clubs/${event.club_id}/group_events/${event.id}`
