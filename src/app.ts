@@ -1,6 +1,6 @@
 import { getAccessToken } from './auth';
 import { getClubs } from './strava';
-import { filterBerlinEvents, formatEvents, saveEventsToFile } from './utils';
+import { filterEventsByCity, formatEvents, saveEventsToFile } from './utils';
 import { Logger } from './logger';
 import { EventService } from './services/eventService';
 import config from './config';
@@ -67,26 +67,26 @@ export class App {
       const allEvents = await this.eventService.fetchClubEvents(accessToken, clubs);
       this.logger.info(`Total events fetched: ${allEvents.length}`);
       
-      // Filter events in Berlin
-      this.logger.info(`\nFiltering events in Berlin for the next ${config.app.daysAhead} days...`);
-      const berlinEvents = filterBerlinEvents(allEvents);
-      this.logger.info(`Found ${berlinEvents.length} events in Berlin in the next ${config.app.daysAhead} days`);
+      // Filter events by city
+      this.logger.info(`\nFiltering events in ${config.app.filterCity} for the next ${config.app.daysAhead} days...`);
+      const cityEvents = filterEventsByCity(allEvents);
+      this.logger.info(`Found ${cityEvents.length} events in ${config.app.filterCity} in the next ${config.app.daysAhead} days`);
       
-      if (berlinEvents.length === 0) {
-        this.logger.info(`No events found in Berlin for the next ${config.app.daysAhead} days.`);
+      if (cityEvents.length === 0) {
+        this.logger.info(`No events found in ${config.app.filterCity} for the next ${config.app.daysAhead} days.`);
       } else {
         // Format and display events
         this.logger.info('\nFormatting events by date...');
-        const formattedEvents = formatEvents(berlinEvents);
-        this.logger.info('\n=== BERLIN RIDES FOR THE NEXT WEEK ===');
+        const formattedEvents = formatEvents(cityEvents);
+        this.logger.info(`\n=== ${config.app.filterCity.toUpperCase()} RIDES FOR THE NEXT WEEK ===`);
         console.log(formattedEvents);
         
         // Save events to file
         const today = new Date();
-        const fileName = `berlin-events-${today.toISOString().split('T')[0]}.json`;
+        const fileName = `${config.app.filterCity}-events-${today.toISOString().split('T')[0]}.json`;
         const filePath = path.join('output', fileName);
         this.logger.info(`\nSaving events to file: ${filePath}`);
-        saveEventsToFile(berlinEvents, filePath);
+        saveEventsToFile(cityEvents, filePath);
       }
       
       // Save all events regardless of location

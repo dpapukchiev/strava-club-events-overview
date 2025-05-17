@@ -14,5 +14,6 @@ export default {
     concurrency: parseInt(process.env.CONCURRENCY || '3', 10),
     debug: process.env.DEBUG === 'true',
     daysAhead: parseInt(process.env.DAYS_AHEAD || '7', 10),
+    filterCity: process.env.FILTER_CITY || 'berlin',
   }
 }; 

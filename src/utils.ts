@@ -6,10 +6,10 @@ import fs from 'fs';
 import path from 'path';
 
 const logger = new Logger('Utils');
-const { daysAhead } = config.app;
+const { daysAhead, filterCity } = config.app;
 
-export function filterBerlinEvents(events: ClubEvent[]): ClubEvent[] {
-  logger.info(`Filtering ${events.length} events for Berlin location and dates within next ${daysAhead} days`);
+export function filterEventsByCity(events: ClubEvent[]): ClubEvent[] {
+  logger.info(`Filtering ${events.length} events for ${filterCity} location and dates within next ${daysAhead} days`);
   
   const today = new Date();
   const endDate = addDays(today, daysAhead);
@@ -21,12 +21,12 @@ export function filterBerlinEvents(events: ClubEvent[]): ClubEvent[] {
       return false;
     }
     
-    // Check if the event is in Berlin based on description or address
+    // Check if the event is in the configured city based on description or address
     const description = event.description?.toLowerCase() || '';
     const address = event.address?.toLowerCase() || '';
-    const isBerlinEvent = description.includes('berlin') || address.includes('berlin');
+    const isInCity = description.includes(filterCity) || address.includes(filterCity);
     
-    if (!isBerlinEvent) {
+    if (!isInCity) {
       return false;
     }
     
@@ -39,11 +39,11 @@ export function filterBerlinEvents(events: ClubEvent[]): ClubEvent[] {
     return hasUpcomingOccurrence;
   });
   
-  logger.info(`Found ${filteredEvents.length} events in Berlin within the next ${daysAhead} days`);
+  logger.info(`Found ${filteredEvents.length} events in ${filterCity} within the next ${daysAhead} days`);
   
   // Log some basic info about the filtered events
   if (filteredEvents.length > 0) {
-    logger.info('Berlin events found:');
+    logger.info(`${filterCity} events found:`);
     filteredEvents.forEach(event => {
       logger.debug(`- ${event.title} (Club ID: ${event.club_id})`);
       logger.debug(`  Distance: ${event.distance ? `${(event.distance / 1000).toFixed(1)} km` : 'Not specified'}`);

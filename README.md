@@ -1,6 +1,6 @@
 # Strava Club Rides Scraper
 
-This application polls Strava for rides in Berlin from clubs you are a member of and provides a formatted output of events for the next 7 days. The application uses parallel processing for improved performance.
+This application polls Strava for rides from clubs you are a member of, filters them by city, and provides a formatted output of events for the next 7 days. The application uses parallel processing for improved performance.
 
 ## Features
 
@@ -78,6 +78,7 @@ strava-scraper/
    CONCURRENCY=3          # Number of parallel requests (default: 3)
    DAYS_AHEAD=7           # Number of days to look ahead (default: 7)
    DEBUG=false            # Enable debug logging (default: false)
+   FILTER_CITY=berlin     # City to filter events by (default: berlin)
    ```
 
 ## Building and Running
@@ -140,7 +141,7 @@ The web interface provides the following features:
 
 ## Output Format
 
-The application will display rides in Berlin for the next 7 days in this format:
+The application will display rides in the configured city for the next 7 days in this format:
 
 ```
 ===== Wednesday, October 25, 2023 =====
