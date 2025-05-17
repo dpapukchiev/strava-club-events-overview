@@ -4,39 +4,19 @@ import { filterEventsByCity, formatEvents, saveEventsToFile } from './utils';
 import { Logger } from './logger';
 import { EventService } from './services/eventService';
 import config from './config';
-import clubConfig from './clubConfig';
 import axios, { AxiosError } from 'axios';
-import { Club } from './types';
 import path from 'path';
+import { ClubSelector } from './clubSelector';
 
 export class App {
   private logger = new Logger('App');
   private eventService: EventService;
+  private clubSelector: ClubSelector;
 
   constructor() {
     this.eventService = new EventService(config.app.concurrency);
+    this.clubSelector = new ClubSelector();
     this.logger.info('Strava Club Rides Scraper initialized');
-  }
-
-  /**
-   * Filter clubs based on the club configuration
-   */
-  private filterClubs(clubs: Club[]): Club[] {
-    if (clubConfig.useWhitelist) {
-      // Whitelist mode - only include clubs in the includeList
-      const filteredClubs = clubs.filter(club => 
-        clubConfig.includeList.includes(club.name)
-      );
-      this.logger.info(`Filtered down to ${filteredClubs.length} whitelisted clubs`);
-      return filteredClubs;
-    } else {
-      // Blacklist mode - exclude clubs in the excludeList
-      const filteredClubs = clubs.filter(club => 
-        !clubConfig.excludeList.includes(club.name)
-      );
-      this.logger.info(`Filtered out ${clubs.length - filteredClubs.length} blacklisted clubs`);
-      return filteredClubs;
-    }
   }
 
   public async run(): Promise<void> {
@@ -53,8 +33,8 @@ export class App {
       const allClubs = await getClubs(accessToken);
       this.logger.info(`Found ${allClubs.length} clubs total`);
       
-      // Filter clubs based on configuration
-      const clubs = this.filterClubs(allClubs);
+      // Interactive club selection
+      const clubs = await this.clubSelector.selectClubs(allClubs);
       
       // Log the selected clubs
       this.logger.info(`Working with ${clubs.length} selected clubs:`);

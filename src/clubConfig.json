@@ -1,0 +1,14 @@
+{
+  "useWhitelist": true,
+  "includeList": [
+    "8bar Community",
+    "Rapha Berlin",
+    "Standert Bicycles",
+    "CYKEL BUTIK",
+    "super fast super nice",
+    "Trek Bicycle Berlin",
+    "Ryzon - Performance Apparel",
+    "Social Bike Club Berlin"
+  ],
+  "excludeList": []
+}
